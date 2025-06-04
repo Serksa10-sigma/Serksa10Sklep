@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Sklep Serksa10</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    .products, .cart {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .product {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    input[type="text"] {
+      padding: 8px;
+      margin-top: 10px;
+      width: 200px;
+    }
+    #paymentStatus {
+      margin-top: 10px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sklep Serksa10</h1>
+  </header>
+
+  <section class="products">
+    <h2>Produkty</h2>
+    <div class="product">
+      <span>Koszulka Real Madryt</span>
+      <span>49 zł</span>
+      <button onclick="addToCart('Koszulka Real Madryt', 49)">Dodaj</button>
+    </div>
+    <div class="product">
+      <span>Czapka Stumble Guys</span>
+      <span>29 zł</span>
+      <button onclick="addToCart('Czapka Stumble Guys', 29)">Dodaj</button>
+    </div>
+    <div class="product">
+      <span>Plecak z LEGO</span>
+      <span>79 zł</span>
+      <button onclick="addToCart('Plecak z LEGO', 79)">Dodaj</button>
+    </div>
+  </section>
+
+  <section class="cart">
+    <h2>🛒 Koszyk</h2>
+    <ul id="cartItems"></ul>
+    <p><strong>Suma: </strong><span id="total">0</span> zł</p>
+    <input type="text" id="blikCode" placeholder="Wpisz kod BLIK">
+    <button onclick="pay()">Zapłać</button>
+    <p id="paymentStatus"></p>
+  </section>
+
+  <script>
+    const cartItems = [];
+    const cartList = document.getElementById('cartItems');
+    const totalSpan = document.getElementById('total');
+    const paymentStatus = document.getElementById('paymentStatus');
+
+    function addToCart(name, price) {
+      cartItems.push({ name, price });
+      updateCart();
+    }
+
+    function updateCart() {
+      cartList.innerHTML = '';
+      let total = 0;
+      cartItems.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - ${item.price} zł`;
+        cartList.appendChild(li);
+        total += item.price;
+      });
+      totalSpan.textContent = total;
+    }
+
+    function pay() {
+      const blikCode = document.getElementById('blikCode').value;
+      if (blikCode.length === 6) {
+        paymentStatus.textContent = "✅ Płatność zakończona pomyślnie!";
+        cartItems.length = 0;
+        updateCart();
+        document.getElementById('blikCode').value = '';
+      } else {
+        paymentStatus.textContent = "❌ Nieprawidłowy kod BLIK (musi mieć 6 cyfr)";
+        paymentStatus.style.color = 'red';
+      }
+    }
+  </script>
+</body>
+</html>
